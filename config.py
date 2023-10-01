@@ -6,7 +6,11 @@ DIRECTORY_MAPPING = {
     'Images': ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.svg', '.webp'],
     'Audio': ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a', '.opus'],
     'Video': ['.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm', '.m4v', '.mpg', '.mpeg'],
-    'Code': ['.py', '.java', '.cpp', '.c', '.html', '.css', '.js', '.json', '.xml', '.yaml', '.yml', '.php'],
+    'Code': [
+        '.html', '.css', '.js', '.json', '.xml', '.yaml', '.yml', '.php', '.py', '.java', '.cpp', '.c', '.cs',
+        '.rb', '.swift', '.ts', '.jsx', '.tsx', '.scss', '.sass', '.less', '.pl', '.lua', '.go',
+        '.rust', '.dart', '.scala', '.kotlin', '.asm', '.vbs', '.ejs'
+            ],
     'Archives': ['.zip', '.rar', '.7z', '.tar', '.gz', '.tgz', '.bz2', '.xz'],
     'Ebooks': ['.epub', '.mobi', '.azw'],
     'Scripts': ['.sh', '.bash', '.ps1', '.bat', '.cmd'],
