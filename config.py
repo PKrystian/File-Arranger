@@ -1,5 +1,5 @@
-LOG_FILE_INFO = 'file-arranger-info.log'
-LOG_FILE_ERROR = 'file-arranger-error.log'
+LOG_FILE_INFO = 'info.log'
+LOG_FILE_ERROR = 'error.log'
 OTHERS_CATEGORY = 'Others'
 DIRECTORY_MAPPING = {
     'Documents': ['.txt', '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.csv', '.ppt', '.pptx', '.odt', '.ods', '.rtf'],
