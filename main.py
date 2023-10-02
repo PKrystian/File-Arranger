@@ -3,6 +3,7 @@ import shutil
 import logging
 import argparse
 from config import *
+from tqdm import tqdm
 from pathlib import Path
 
 def configure_logging() -> logging.Logger:
@@ -40,13 +41,13 @@ def move_file(file_path: str, destination_path: str, dry_run: bool | None = Fals
     """
     try:
         if Path(file_path) == Path(destination_path):
-            logger.info(f"No file movement required for {file_path}")
+            logger.info(f"{'DRY RUN: ' if dry_run else ''}No file movement required for {file_path}")
             return
         if not dry_run:
             shutil.move(file_path, destination_path)
         logger.info(f"{'DRY RUN: ' if dry_run else ''}Moving {file_path} to {destination_path}")
     except FileExistsError:
-        backup_path = os.path.join(destination_path, f"{Path(file_path).stem}_backup{Path(file_path).suffix}")
+        backup_path = Path(destination_path, f"{Path(file_path).stem}_backup{Path(file_path).suffix}")
         shutil.move(file_path, backup_path)
         logger.error(f"File {file_path} already exists in {destination_path}. Moved to {backup_path}")
     except Exception as e:
@@ -94,13 +95,16 @@ def organize_files(source_directory: str, dry_run: bool | None = False) -> None:
         None
 
     """
+    progress_bar = tqdm(total=len(list(scan_directory(source_directory))), desc=f"Organizing Files", dynamic_ncols=True, ascii=True, bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}")
     for item in scan_directory(source_directory):
         file_path = Path(item)
         file_extension = os.path.splitext(file_path)[1].lower()
         directory_name = get_directory_by_extension(file_extension)
-        destination_path = os.path.join(source_directory, directory_name)
+        destination_path = Path(source_directory, directory_name)
         os.makedirs(destination_path, exist_ok=True)
-        move_file(file_path, os.path.join(destination_path, file_path.name), dry_run)
+        move_file(file_path, Path(destination_path, file_path.name), dry_run)
+        progress_bar.update(1)
+    progress_bar.close()
 
 def main() -> None:
     """
@@ -111,9 +115,9 @@ def main() -> None:
         None
 
     """
-    parser = argparse.ArgumentParser(description="Organize files based on file extensions, e.g. .pdf, .mp3")
-    parser.add_argument("source_directory", help="Source directory to organize, e.g. /home/user/Downloads")
-    parser.add_argument("--dry-run", action="store_true", help="Run in dry run mode, no files will be moved")
+    parser = argparse.ArgumentParser(description=f"Organize files based on file extensions, e.g. .pdf, .mp3")
+    parser.add_argument("source_directory", help=f"Source directory to organize, e.g. '/home/user/Downloads'")
+    parser.add_argument("--dry-run", action="store_true", help=f"Run in dry run mode, no files will be moved")
     args = parser.parse_args()
     source_directory = args.source_directory
     dry_run = args.dry_run
@@ -131,4 +135,4 @@ if __name__ == "__main__":
         logger = configure_logging()
         main()
     except KeyboardInterrupt:
-        print("\nScript interrupted by user, exiting...")
+        print(f"\nScript interrupted by user, exiting...")
