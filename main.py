@@ -2,9 +2,14 @@ import os
 import shutil
 import logging
 import argparse
-from config import *
 from tqdm import tqdm
 from pathlib import Path
+from config import (
+    LOG_FILE_INFO,
+    LOG_FILE_ERROR,
+    DIRECTORY_MAPPING,
+    OTHERS_CATEGORY,
+)
 
 def configure_logging() -> logging.Logger:
     """
