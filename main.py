@@ -13,19 +13,17 @@ from config import (
 
 def configure_logging() -> logging.Logger:
     """
-
     Configure logging settings for the script
     Returns:
         logging.Logger: The configured logger instance
-
     """
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    file_handler_info = logging.FileHandler(LOG_FILE_INFO)
+    file_handler_info = logging.FileHandler(LOG_FILE_INFO, encoding='utf-8')
     file_handler_info.setLevel(logging.INFO)
     file_handler_info.setFormatter(formatter)
-    file_handler_error = logging.FileHandler(LOG_FILE_ERROR)
+    file_handler_error = logging.FileHandler(LOG_FILE_ERROR, encoding='utf-8')
     file_handler_error.setLevel(logging.ERROR)
     file_handler_error.setFormatter(formatter)
     logger.addHandler(file_handler_info)
@@ -34,7 +32,6 @@ def configure_logging() -> logging.Logger:
 
 def move_file(file_path: str, destination_path: str, dry_run: bool | None = False) -> None:
     """
-
     Move a file from the source path to the destination path
     Parameters:
         file_path (str): The path to the file to be moved
@@ -42,7 +39,6 @@ def move_file(file_path: str, destination_path: str, dry_run: bool | None = Fals
         dry_run (bool, optional): Whether to run in dry run mode. Defaults to False
     Returns:
         None
-
     """
     try:
         if Path(file_path) == Path(destination_path):
@@ -60,28 +56,24 @@ def move_file(file_path: str, destination_path: str, dry_run: bool | None = Fals
 
 def get_directory_by_extension(extension: str) -> str:
     """
-
     Get the directory name based on the file extension
     Parameters:
         extension (str): The file extension
     Returns:
         str: The directory name
-
     """
     for category, extensions in DIRECTORY_MAPPING.items():
         if extension in extensions:
             return category
     return OTHERS_CATEGORY
 
-def scan_directory(base_directory: str) -> str:
+def scan_directory(base_directory: str) -> os.DirEntry:
     """
-
     Recursively scan a directory for files and subdirectories
     Parameters:
         base_directory (str): The base directory to start scanning from
     Yields: 
         os.DirEntry: An iterator yielding DirEntry objects representing files and directories
-
     """
     for entry in os.scandir(base_directory):
         if entry.is_file():
@@ -91,14 +83,12 @@ def scan_directory(base_directory: str) -> str:
 
 def organize_files(source_directory: str, dry_run: bool | None = False) -> None:
     """
-
     Organize files in a source directory based on their file extensions
     Parameters:
         source_directory (str): The source directory containing files to be organized
         dry_run (bool, optional): Whether to run in dry run mode. Defaults to False
     Returns: 
         None
-
     """
     progress_bar = tqdm(total=len(list(scan_directory(source_directory))), desc=f"Organizing Files", dynamic_ncols=True, ascii=True, bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}")
     for item in scan_directory(source_directory):
@@ -113,12 +103,10 @@ def organize_files(source_directory: str, dry_run: bool | None = False) -> None:
 
 def main() -> None:
     """
-
     The main entry point of the file organization script
     Parses command-line arguments, organizes files, and prints success messages
     Returns: 
         None
-
     """
     parser = argparse.ArgumentParser(description=f"Organize files based on file extensions, e.g. .pdf, .mp3")
     parser.add_argument("source_directory", help=f"Source directory to organize, e.g. '/home/user/Downloads'")
